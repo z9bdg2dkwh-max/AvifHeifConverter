@@ -1,0 +1,65 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows10.0.19041.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+    <RootNamespace>AvifHeifConverter.Gui</RootNamespace>
+    <AssemblyName>AvifHeifConverter.Gui</AssemblyName>
+    <Platforms>x64</Platforms>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <UseWinUI>true</UseWinUI>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Version>1.2.0</Version>
+    <Product>AVIF → HEIC 转换器</Product>
+    <Description>把带 HDR Gain Map 的 AVIF 转成 iPhone 可正常显示 HDR 的 HEIC</Description>
+    <Copyright>Copyright (c) 2026 z9bdg2dkwh-max</Copyright>
+  </PropertyGroup>
+
+  <!-- ============ WinUI 3 / Windows App SDK（免打包、自包含）============ -->
+  <PropertyGroup>
+    <WindowsPackageType>None</WindowsPackageType>
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <WindowsSdkPackageVersion>10.0.19041.87</WindowsSdkPackageVersion>
+    <SelfContained>true</SelfContained>
+    <EnableMsixTooling>true</EnableMsixTooling>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- 图标同时复制到输出目录：运行时用 AppWindow.SetIcon 设置窗口/任务栏图标 -->
+    <None Update="AppIcon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="2.6.4" />
+  </ItemGroup>
+
+  <!-- ============ 复用命令行核心的源码 ============
+       直接编译 Core 的源码（而不是引用它的 exe），
+       这样 App 与转换逻辑同处一个程序集，internal 类型可直接使用。
+       Program.cs 有自己的 Main，与 WinUI 自动生成的入口冲突，故排除。 -->
+  <ItemGroup>
+    <Compile Include="..\AvifHeifConverter\Services\**\*.cs">
+      <Link>Core\Services\%(Filename)%(Extension)</Link>
+    </Compile>
+    <Compile Include="..\AvifHeifConverter\Models\**\*.cs">
+      <Link>Core\Models\%(Filename)%(Extension)</Link>
+    </Compile>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <!-- 应用图标：嵌入 exe 资源（文件资源管理器里显示的就是它） -->
+    <ApplicationIcon>AppIcon.ico</ApplicationIcon>
+    <PublishReadyToRun>false</PublishReadyToRun>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <DebugType>none</DebugType>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CA1416;NU1701;MSB3277;CS9057</NoWarn>
+  </PropertyGroup>
+
+</Project>

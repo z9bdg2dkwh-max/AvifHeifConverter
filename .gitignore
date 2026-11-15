@@ -1,0 +1,30 @@
+# 构建产物
+bin/
+obj/
+publish/
+dist/
+
+# IDE 与本地配置
+.vs/
+.vscode/
+*.user
+*.suo
+*.userprefs
+
+# 备份与日志
+*.bak*
+*.log
+*.tmp
+
+# 编译产物（源码仓库只保留文本源码与图标）
+*.dll
+*.exe
+*.pdb
+*.pri
+*.xbf
+*.mui
+
+# 系统文件
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/

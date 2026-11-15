@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <!-- 命令行核心不依赖 Windows SDK，便于在无 WinUI 环境独立验证 -->
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <RootNamespace>AvifHeifConverter</RootNamespace>
+    <AssemblyName>AvifHeifConverter</AssemblyName>
+    <Platforms>x64</Platforms>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Version>1.0.0</Version>
+    <FileVersion>1.0.0.0</FileVersion>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <Product>AVIF 转 HEIF/HEIC 转换器</Product>
+    <Description>将 AVIF 图片转换为 HEIF/HEIC 格式，完整保留 HDR Gain Map 与元数据</Description>
+    <Copyright>Copyright (c) 2026 z9bdg2dkwh-max</Copyright>
+  </PropertyGroup>
+
+  <!-- ============ 命令行核心模式（无 WinUI 依赖，便于独立验证） ============ -->
+  <!-- 通过 -p:CoreMode=true 切换为控制台程序，用于验证转换与Gain Map 逻辑 -->
+
+  <ItemGroup>
+    <Compile Remove="**/*.xaml.cs" />
+    <!-- 最小化容器实验脚手架：仅开发期用于逐级排查，产品不再需要。
+         保留文件备查，从构建中排除。 -->
+    <Compile Remove="Services/MinExperiment.cs" />
+  </ItemGroup>
+
+  <!-- 测试工程可访问 internal 类型（FullPipeline 等），用于端到端与 GUI 通路仿真 -->
+  <ItemGroup>
+    <InternalsVisibleTo Include="e2e" />
+  </ItemGroup>
+
+</Project>
